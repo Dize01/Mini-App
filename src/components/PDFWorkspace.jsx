@@ -2,6 +2,7 @@ import { useRef, useEffect, useState, useCallback } from 'react';
 import * as pdfjsLib from 'pdfjs-dist';
 import TextBox from './TextBox';
 import Shape from './Shape';
+import ImageOverlay from './ImageOverlay';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.js`;
 
@@ -9,12 +10,14 @@ export default function PDFWorkspace({
   file,
   textBoxes,
   shapes,
+  images,
   selectedId,
   onSelectItem,
   onAddTextBox,
   onAddShape,
   onUpdateBox,
   onUpdateShape,
+  onUpdateImage,
   selectedTool,
   totalScale,
   onPageInfoChange,
@@ -127,7 +130,19 @@ export default function PDFWorkspace({
             >
               <canvas ref={el => { canvasRefs.current[pageNum - 1] = el; }} style={{ display: 'block' }}/>
 
-              {/* Shapes for this page */}
+              {/* Images (bottom layer) */}
+              {images.filter(img => (img.page ?? 1) === pageNum).map(img => (
+                <ImageOverlay
+                  key={img.id}
+                  image={img}
+                  isSelected={img.id === selectedId}
+                  onSelect={() => onSelectItem(img.id)}
+                  onUpdate={onUpdateImage}
+                  totalScale={totalScale}
+                />
+              ))}
+
+              {/* Shapes (middle layer) */}
               {shapes.filter(s => (s.page ?? 1) === pageNum).map(shape => (
                 <Shape
                   key={shape.id}

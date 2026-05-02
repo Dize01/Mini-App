@@ -2,12 +2,12 @@ import { downloadPDF } from '../utils/pdfUtils';
 
 const ZOOM_LEVELS = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
 
-export default function TopBar({ fileName, zoom, onZoomChange, file, textBoxes, shapes, onReset }) {
+export default function TopBar({ fileName, zoom, onZoomChange, file, textBoxes, shapes, images, onReset }) {
   const zoomIdx = ZOOM_LEVELS.indexOf(zoom);
 
   const handleDownload = async () => {
     try {
-      await downloadPDF(file, textBoxes, shapes);
+      await downloadPDF(file, textBoxes, shapes, images);
     } catch (err) {
       console.error('Download failed:', err);
       alert('Failed to generate PDF. Please try again.');

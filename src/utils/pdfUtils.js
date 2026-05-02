@@ -9,20 +9,44 @@ function hexToRgb(hex) {
   );
 }
 
-export async function downloadPDF(file, textBoxes = [], shapes = []) {
+export async function downloadPDF(file, textBoxes = [], shapes = [], images = []) {
   const pdfDoc = await PDFDocument.load(await file.arrayBuffer());
   const pages  = pdfDoc.getPages();
 
   const helvetica     = await pdfDoc.embedFont(StandardFonts.Helvetica);
   const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-  // ── Draw shapes ──────────────────────────────────────────────
+  // ── Images (bottom layer) ─────────────────────────────────
+  for (const image of images) {
+    const page = pages[(image.page ?? 1) - 1];
+    if (!page) continue;
+    const { height: pH } = page.getSize();
+
+    let pdfImage;
+    try {
+      const isJpeg = image.mimeType === 'image/jpeg' || image.mimeType === 'image/jpg';
+      pdfImage = isJpeg
+        ? await pdfDoc.embedJpg(image.bytes)
+        : await pdfDoc.embedPng(image.bytes);
+    } catch (e) {
+      console.warn('Could not embed image:', e);
+      continue;
+    }
+
+    page.drawImage(pdfImage, {
+      x: image.x,
+      y: pH - image.y - image.height,
+      width:  image.width,
+      height: image.height,
+    });
+  }
+
+  // ── Shapes (middle layer) ─────────────────────────────────
   for (const shape of shapes) {
     const page = pages[(shape.page ?? 1) - 1];
     if (!page) continue;
     const { height: pH } = page.getSize();
 
-    // Convert top-left origin → pdf-lib bottom-left origin
     const x = shape.x;
     const y = pH - shape.y - shape.height;
     const hasFill   = shape.fillColor && shape.fillColor !== 'none';
@@ -46,7 +70,7 @@ export async function downloadPDF(file, textBoxes = [], shapes = []) {
     }
   }
 
-  // ── Draw text boxes ───────────────────────────────────────────
+  // ── Text (top layer) ──────────────────────────────────────
   for (const box of textBoxes) {
     if (!box.text.trim()) continue;
     const page = pages[(box.page ?? 1) - 1];
