@@ -18,11 +18,11 @@ export default function Editor({ file, onReset }) {
   // Total pixels per PDF point
   const totalScale = RENDER_SCALE * zoom;
 
-  const addTextBox = useCallback((pdfX, pdfY) => {
+  const addTextBox = useCallback((pdfX, pdfY, pageNum = 1) => {
     const id = String(nextId++);
     setTextBoxes(prev => [...prev, {
       id,
-      page: 1,
+      page: pageNum,
       x: pdfX,
       y: pdfY,
       text: 'Enter text',

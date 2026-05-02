@@ -1,6 +1,6 @@
 import { useRef, useEffect, useCallback } from 'react';
 
-export default function TextBox({ box, isSelected, onSelect, onUpdate, totalScale, containerRef }) {
+export default function TextBox({ box, isSelected, onSelect, onUpdate, totalScale }) {
   const editorRef = useRef(null);
   const isEditingRef = useRef(false);
   const dragState = useRef(null);

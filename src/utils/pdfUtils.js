@@ -16,17 +16,15 @@ export async function downloadPDF(file, textBoxes, pageInfo) {
   const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
   const pages = pdfDoc.getPages();
-  const firstPage = pages[0];
-  const { height: pdfHeight } = firstPage.getSize();
 
   for (const box of textBoxes) {
     if (!box.text.trim()) continue;
     const page = pages[(box.page ?? 1) - 1];
     if (!page) continue;
 
-    // box.x, box.y are in PDF points from top-left.
-    // pdf-lib uses bottom-left origin, so flip y.
-    // Subtract fontSize to place the top of the glyph at box.y.
+    // Use each page's own height for accurate y-axis conversion.
+    // box.x, box.y are PDF points from top-left; pdf-lib uses bottom-left.
+    const { height: pdfHeight } = page.getSize();
     const x = box.x;
     const y = pdfHeight - box.y - box.fontSize;
 

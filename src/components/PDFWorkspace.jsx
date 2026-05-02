@@ -16,149 +16,173 @@ export default function PDFWorkspace({
   onPageInfoChange,
   onDeselect,
 }) {
-  const canvasRef = useRef(null);
-  const containerRef = useRef(null);
-  const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
   const [pdfDoc, setPdfDoc] = useState(null);
+  const [numPages, setNumPages] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const renderTaskRef = useRef(null);
 
-  // Load PDF document once when file changes
+  const canvasRefs = useRef([]);
+  const pageRefs = useRef([]);
+
+  // Load PDF document once per file
   useEffect(() => {
     if (!file) return;
     let cancelled = false;
     setIsLoading(true);
+    setPdfDoc(null);
+    setNumPages(0);
 
-    const load = async () => {
-      const url = URL.createObjectURL(file);
-      try {
-        const doc = await pdfjsLib.getDocument({ url }).promise;
-        if (!cancelled) setPdfDoc(doc);
-      } catch (err) {
-        if (!cancelled) console.error('PDF load error:', err);
-      } finally {
+    const url = URL.createObjectURL(file);
+    pdfjsLib.getDocument({ url }).promise
+      .then((doc) => {
         URL.revokeObjectURL(url);
-      }
-    };
+        if (!cancelled) {
+          setPdfDoc(doc);
+          setNumPages(doc.numPages);
+        }
+      })
+      .catch((err) => {
+        URL.revokeObjectURL(url);
+        if (!cancelled) console.error('PDF load error:', err);
+      });
 
-    load();
     return () => { cancelled = true; };
   }, [file]);
 
-  // Render current page whenever doc or scale changes
+  // Render all pages whenever doc or scale changes
   useEffect(() => {
-    if (!pdfDoc) return;
+    if (!pdfDoc || numPages === 0) return;
+
     let cancelled = false;
+    setIsLoading(true);
 
-    const render = async () => {
-      const page = await pdfDoc.getPage(1);
-      if (cancelled) return;
+    const renderAll = async () => {
+      for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+        if (cancelled) break;
 
-      const viewport = page.getViewport({ scale: totalScale });
-      const canvas = canvasRef.current;
-      if (!canvas || cancelled) return;
+        const page = await pdfDoc.getPage(pageNum);
+        if (cancelled) break;
 
-      // Cancel any in-progress render
-      if (renderTaskRef.current) {
-        try { renderTaskRef.current.cancel(); } catch (_) {}
-      }
+        const viewport = page.getViewport({ scale: totalScale });
+        const canvas = canvasRefs.current[pageNum - 1];
+        if (!canvas || cancelled) break;
 
-      canvas.width = viewport.width;
-      canvas.height = viewport.height;
-      setCanvasSize({ width: viewport.width, height: viewport.height });
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
 
-      // Expose page dimensions in PDF points for coordinate conversion
-      const baseViewport = page.getViewport({ scale: 1 });
-      onPageInfoChange({ width: baseViewport.width, height: baseViewport.height });
+        // Expose first-page info for coordinate reference
+        if (pageNum === 1) {
+          const base = page.getViewport({ scale: 1 });
+          onPageInfoChange({ width: base.width, height: base.height });
+        }
 
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const task = page.render({ canvasContext: ctx, viewport });
-      renderTaskRef.current = task;
-
-      try {
-        await task.promise;
-        if (!cancelled) setIsLoading(false);
-      } catch (err) {
-        if (err?.name !== 'RenderingCancelledException' && !cancelled) {
-          console.error('Render error:', err);
+        const task = page.render({ canvasContext: ctx, viewport });
+        try {
+          await task.promise;
+        } catch (err) {
+          if (err?.name !== 'RenderingCancelledException') console.error(err);
+          break;
         }
       }
+      if (!cancelled) setIsLoading(false);
     };
 
-    render();
+    renderAll();
     return () => { cancelled = true; };
-  }, [pdfDoc, totalScale]);
+  }, [pdfDoc, numPages, totalScale]);
 
-  const handleCanvasClick = useCallback((e) => {
-    if (selectedTool !== 'text') return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const pdfX = (e.clientX - rect.left) / totalScale;
-    const pdfY = (e.clientY - rect.top) / totalScale;
-    onAddTextBox(pdfX, pdfY);
-  }, [selectedTool, totalScale, onAddTextBox]);
+  const handlePageClick = useCallback((e, pageNum) => {
+    // Don't bubble to workspace background handler
+    e.stopPropagation();
 
-  const handleWorkspaceClick = useCallback((e) => {
-    // Only deselect if clicking directly on the workspace background
-    if (e.target === e.currentTarget || e.target === canvasRef.current) {
-      if (selectedTool === 'select') onDeselect();
-      handleCanvasClick(e);
+    if (selectedTool === 'text') {
+      const container = pageRefs.current[pageNum - 1];
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
+      const pdfX = (e.clientX - rect.left) / totalScale;
+      const pdfY = (e.clientY - rect.top) / totalScale;
+      onAddTextBox(pdfX, pdfY, pageNum);
+    } else {
+      onDeselect();
     }
-  }, [handleCanvasClick, selectedTool, onDeselect]);
+  }, [selectedTool, totalScale, onAddTextBox, onDeselect]);
+
+  const handleWorkspaceClick = useCallback(() => {
+    if (selectedTool === 'select') onDeselect();
+  }, [selectedTool, onDeselect]);
 
   return (
-    <div className="flex-1 overflow-auto bg-gray-200">
-      <div
-        className="flex items-start justify-center p-10 min-h-full min-w-full"
-        style={{ cursor: selectedTool === 'text' ? 'crosshair' : 'default' }}
-        onClick={handleWorkspaceClick}
-      >
-        {/* PDF canvas + overlays container */}
-        <div
-          ref={containerRef}
-          style={{
-            position: 'relative',
-            width: canvasSize.width || 'auto',
-            height: canvasSize.height || 'auto',
-            flexShrink: 0,
-          }}
-          className="shadow-2xl"
-        >
-          {/* Loading overlay */}
-          {isLoading && (
-            <div className="absolute inset-0 bg-white flex items-center justify-center z-30 rounded-sm" style={{ minWidth: 400, minHeight: 500 }}>
-              <div className="flex flex-col items-center gap-3">
-                <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-                <span className="text-sm text-gray-500">Loading PDF…</span>
+    <div
+      className="flex-1 overflow-auto bg-gray-200"
+      style={{ cursor: selectedTool === 'text' ? 'crosshair' : 'default' }}
+      onClick={handleWorkspaceClick}
+    >
+      <div className="flex flex-col items-center py-10 gap-5">
+
+        {/* Initial loading placeholder */}
+        {isLoading && numPages === 0 && (
+          <div
+            className="bg-white shadow-2xl flex items-center justify-center"
+            style={{ width: 612, height: 792 }}
+          >
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+              <span className="text-sm text-gray-500">Loading PDF…</span>
+            </div>
+          </div>
+        )}
+
+        {/* One container per page */}
+        {Array.from({ length: numPages }, (_, i) => i + 1).map((pageNum) => (
+          <div key={pageNum} className="flex flex-col items-center">
+            {/* Page label */}
+            {numPages > 1 && (
+              <div className="self-start mb-1.5 text-xs text-gray-400 font-medium select-none">
+                Page {pageNum} of {numPages}
               </div>
+            )}
+
+            {/* Page canvas + overlays */}
+            <div
+              ref={(el) => { pageRefs.current[pageNum - 1] = el; }}
+              className="relative shadow-2xl"
+              onClick={(e) => handlePageClick(e, pageNum)}
+            >
+              <canvas
+                ref={(el) => { canvasRefs.current[pageNum - 1] = el; }}
+                style={{ display: 'block' }}
+              />
+
+              {/* Text overlays for this page */}
+              {textBoxes
+                .filter((b) => (b.page ?? 1) === pageNum)
+                .map((box) => (
+                  <TextBox
+                    key={box.id}
+                    box={box}
+                    isSelected={box.id === selectedId}
+                    onSelect={() => onSelectBox(box.id)}
+                    onUpdate={onUpdateBox}
+                    totalScale={totalScale}
+                  />
+                ))}
+
+              {/* "Click to add text" hint */}
+              {selectedTool === 'text' && !isLoading && pageNum === 1 && (
+                <div className="absolute bottom-3 left-0 right-0 flex justify-center pointer-events-none">
+                  <span className="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-full shadow-lg font-medium">
+                    Click anywhere to add text
+                  </span>
+                </div>
+              )}
             </div>
-          )}
+          </div>
+        ))}
 
-          <canvas ref={canvasRef} style={{ display: 'block' }} />
-
-          {/* Text overlays */}
-          {textBoxes.map(box => (
-            <TextBox
-              key={box.id}
-              box={box}
-              isSelected={box.id === selectedId}
-              onSelect={() => onSelectBox(box.id)}
-              onUpdate={onUpdateBox}
-              totalScale={totalScale}
-              containerRef={containerRef}
-            />
-          ))}
-
-          {/* Text tool hint */}
-          {selectedTool === 'text' && !isLoading && (
-            <div className="absolute bottom-3 left-0 right-0 flex justify-center pointer-events-none">
-              <span className="bg-blue-600 text-white text-xs px-3 py-1.5 rounded-full shadow-lg font-medium">
-                Click anywhere to add text
-              </span>
-            </div>
-          )}
-        </div>
+        {/* Bottom padding so last page doesn't touch the edge */}
+        {numPages > 0 && <div className="h-10" />}
       </div>
     </div>
   );
