@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(Start-Sleep -Seconds 5)",
+      "Bash(Get-Content \"C:\\\\Users\\\\EDISON~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\e--REACT-Mini-App\\\\c15042cd-6b4d-4847-84e4-4bb7c0fde8e4\\\\tasks\\\\bzrac1p12.output\")",
+      "Bash(npx vite *)"
+    ]
+  }
+}
