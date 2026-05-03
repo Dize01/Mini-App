@@ -67,7 +67,8 @@ function ToolBtn({ active, onClick, title, children, className = '' }) {
       >
         {children}
       </button>
-      <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded-md bg-gray-800 text-white text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-50">
+      {/* Tooltip — desktop only, shows to the right */}
+      <div className="pointer-events-none hidden md:block absolute left-full top-1/2 -translate-y-1/2 ml-2 px-2 py-1 rounded-md bg-gray-800 text-white text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-50">
         {title}
       </div>
     </div>
@@ -87,10 +88,25 @@ export default function Sidebar({
   const hasPanel = selectedBox || selectedShape || selectedImage;
 
   return (
-    <div className="flex shrink-0">
-      {/* Icon toolbar */}
-      <div className="w-14 bg-white border-r border-gray-200 flex flex-col items-center py-3 gap-1 shadow-sm">
+    // col-reverse on mobile: toolbar is first in DOM → appears at bottom; panel → above it
+    // flex-row on desktop: toolbar on left, panel to its right
+    <div className="flex flex-col-reverse md:flex-row shrink-0">
 
+      {/* ── Icon toolbar ── */}
+      <div className="
+        flex flex-row md:flex-col
+        w-full md:w-14
+        h-14 md:h-auto
+        bg-white
+        border-t md:border-t-0 md:border-r
+        border-gray-200
+        items-center
+        justify-around md:justify-start
+        px-2 md:px-0 md:py-3 md:gap-1
+        overflow-x-auto
+        shrink-0
+        shadow-sm
+      ">
         {/* Select */}
         <ToolBtn active={selectedTool === 'select'} onClick={() => onToolChange('select')} title="Select">
           <svg width="15" height="15" viewBox="0 0 24 24" fill={selectedTool === 'select' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -103,17 +119,17 @@ export default function Sidebar({
           T
         </ToolBtn>
 
-        {/* Shapes */}
+        {/* Shape */}
         <ToolBtn active={selectedTool === 'shape'} onClick={() => onToolChange('shape')} title="Add Shape">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <circle cx="12" cy="12" r="9"/>
           </svg>
         </ToolBtn>
 
-        {/* Shape type sub-buttons */}
+        {/* Shape sub-buttons — inline on mobile, stacked on desktop */}
         {selectedTool === 'shape' && (
           <>
-            <div className="w-8 h-px bg-gray-100 my-0.5"/>
+            <div className="hidden md:block w-8 h-px bg-gray-100 my-0.5"/>
             <button onClick={() => onShapeTypeChange('rect')} title="Rectangle"
               className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
                 activeShapeType === 'rect' ? 'bg-blue-100 ring-2 ring-blue-400' : 'hover:bg-gray-100'
@@ -133,7 +149,7 @@ export default function Sidebar({
           </>
         )}
 
-        {/* Image upload — one-shot trigger */}
+        {/* Image upload */}
         <ToolBtn active={false} onClick={() => imageInputRef.current?.click()} title="Add Image">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="2"/>
@@ -153,11 +169,20 @@ export default function Sidebar({
         />
       </div>
 
-      {/* Settings panel */}
+      {/* ── Settings panel ── */}
       {hasPanel && (
-        <div className="w-56 bg-white border-r border-gray-200 flex flex-col p-4 gap-4 overflow-y-auto shadow-sm">
+        <div className="
+          w-full md:w-56
+          bg-white
+          border-t md:border-t-0 md:border-r
+          border-gray-200
+          flex flex-col p-4 gap-4
+          overflow-y-auto
+          max-h-52 md:max-h-none
+          shadow-sm
+        ">
 
-          {/* ── TEXT ── */}
+          {/* TEXT */}
           {selectedBox && (
             <>
               <SectionTitle>Text</SectionTitle>
@@ -185,7 +210,7 @@ export default function Sidebar({
             </>
           )}
 
-          {/* ── SHAPE ── */}
+          {/* SHAPE */}
           {selectedShape && (
             <>
               <SectionTitle>Shape</SectionTitle>
@@ -231,7 +256,7 @@ export default function Sidebar({
             </>
           )}
 
-          {/* ── IMAGE ── */}
+          {/* IMAGE */}
           {selectedImage && (
             <>
               <SectionTitle>Image</SectionTitle>

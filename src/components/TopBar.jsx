@@ -1,6 +1,6 @@
 import { downloadPDF } from '../utils/pdfUtils';
 
-const ZOOM_LEVELS = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
+const ZOOM_LEVELS = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0];
 
 export default function TopBar({ fileName, zoom, onZoomChange, file, textBoxes, shapes, images, onReset }) {
   const zoomIdx = ZOOM_LEVELS.indexOf(zoom);
