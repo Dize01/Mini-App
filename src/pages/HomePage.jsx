@@ -38,10 +38,10 @@ const TOOLS = [
   },
   {
     href: '/sign-pdf-online',
-    accent: 'bg-violet-500',
-    iconBg: 'bg-violet-50',
-    iconColor: 'text-violet-600',
-    btn: 'bg-violet-600 hover:bg-violet-700',
+    accent: 'bg-purple-500',
+    iconBg: 'bg-purple-50',
+    iconColor: 'text-purple-600',
+    btn: 'bg-purple-600 hover:bg-purple-700',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 20h9"/>

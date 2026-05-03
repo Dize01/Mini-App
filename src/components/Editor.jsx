@@ -110,6 +110,27 @@ export default function Editor({ file, onReset }) {
     setSelectedId(null);
   }, []);
 
+  const addSignature = useCallback(async ({ dataUrl, bytes, mimeType }) => {
+    const img = new window.Image();
+    img.src = dataUrl;
+    await new Promise(res => { img.onload = res; });
+    const maxW  = 200;
+    const scale = Math.min(1, maxW / img.naturalWidth);
+    const w = Math.round(img.naturalWidth  * scale);
+    const h = Math.round(img.naturalHeight * scale);
+    const pageW = pageInfo?.width  ?? 595;
+    const pageH = pageInfo?.height ?? 842;
+    const id = String(nextId++);
+    setImages(prev => [...prev, {
+      id, page: 1,
+      x: pageW / 2 - w / 2,
+      y: pageH / 2 - h / 2,
+      width: w, height: h,
+      dataUrl, bytes, mimeType,
+    }]);
+    setSelectedId(id);
+  }, [pageInfo]);
+
   // ────────────────────────────────────────────────────────────
   const handleToolChange = useCallback((tool) => {
     setSelectedTool(tool);
@@ -144,6 +165,7 @@ export default function Editor({ file, onReset }) {
           onUpdateImage={updateImage}
           onDeleteImage={deleteImage}
           onAddImage={addImage}
+          onAddSignature={addSignature}
         />
         <PDFWorkspace
           file={file}

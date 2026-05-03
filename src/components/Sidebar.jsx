@@ -1,4 +1,5 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import SignatureModal from './SignatureModal';
 
 const PRESET_COLORS = ['#1a1a1a','#ef4444','#3b82f6','#22c55e','#f59e0b','#8b5cf6','#ec4899','#ffffff'];
 
@@ -83,13 +84,16 @@ export default function Sidebar({
   onUpdateShape, onDeleteShape,
   onUpdateImage, onDeleteImage,
   onAddImage,
+  onAddSignature,
 }) {
   const imageInputRef = useRef(null);
+  const [showSigModal, setShowSigModal] = useState(false);
   const hasPanel = selectedBox || selectedShape || selectedImage;
 
   return (
-    // col-reverse on mobile: toolbar is first in DOM → appears at bottom; panel → above it
-    // flex-row on desktop: toolbar on left, panel to its right
+    <>
+    {/* col-reverse on mobile: toolbar is first in DOM → appears at bottom; panel → above it */}
+    {/* flex-row on desktop: toolbar on left, panel to its right */}
     <div className="flex flex-col-reverse md:flex-row shrink-0">
 
       {/* ── Icon toolbar ── */}
@@ -157,6 +161,15 @@ export default function Sidebar({
             <polyline points="21 15 16 10 5 21"/>
           </svg>
         </ToolBtn>
+
+        {/* Signature */}
+        <ToolBtn active={false} onClick={() => setShowSigModal(true)} title="Add Signature">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 20h9"/>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+          </svg>
+        </ToolBtn>
+
         <input
           ref={imageInputRef}
           type="file"
@@ -283,5 +296,13 @@ export default function Sidebar({
         </div>
       )}
     </div>
+
+    {showSigModal && (
+      <SignatureModal
+        onClose={() => setShowSigModal(false)}
+        onConfirm={(sig) => { onAddSignature(sig); setShowSigModal(false); }}
+      />
+    )}
+    </>
   );
 }

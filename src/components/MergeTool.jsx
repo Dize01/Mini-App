@@ -173,7 +173,7 @@ export default function MergeTool() {
   const isEmpty = files.length === 0;
 
   return (
-    <div className="max-w-lg mx-auto px-4 sm:px-6 mb-10">
+    <div className="max-w-lg mx-auto w-full px-4 sm:px-6">
       <input
         ref={fileInputRef}
         type="file"
@@ -184,7 +184,8 @@ export default function MergeTool() {
       />
 
       {isEmpty ? (
-        /* ── Drop zone ── */
+        <>
+        {/* ── Drop zone ── */}
         <div
           onDragOver={onDragOver}
           onDragLeave={onDragLeave}
@@ -193,7 +194,7 @@ export default function MergeTool() {
             isDragging ? 'border-green-400 bg-green-50' : 'border-gray-200 bg-white hover:border-gray-300'
           }`}
         >
-          <div className="w-14 h-14 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M8 6H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3"/>
               <polyline points="15 3 12 6 9 3"/>
@@ -204,11 +205,13 @@ export default function MergeTool() {
           <p className="text-gray-400 text-sm mb-6">or</p>
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="bg-green-600 hover:bg-green-700 active:scale-95 text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all"
+            className="bg-green-600 hover:bg-green-700 active:scale-95 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition-all"
           >
             Choose PDF Files
           </button>
         </div>
+        <p className="text-center text-xs text-gray-400 mt-4">Only PDF files are supported</p>
+        </>
       ) : (
         /* ── File list ── */
         <div>

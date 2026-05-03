@@ -1,10 +1,13 @@
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import UploadScreen from '../components/UploadScreen';
+import Editor from '../components/Editor';
 import FAQ from '../components/FAQ';
 import Footer from '../components/Footer';
 
 const HOW_TO = [
   { step: '01', title: 'Upload your PDF', desc: 'Select the PDF document you need to sign.' },
-  { step: '02', title: 'Add your signature', desc: 'Draw, type, or upload an image of your signature and place it on the page.' },
+  { step: '02', title: 'Add your signature', desc: 'Click the signature tool, then draw, type, or upload your signature and place it on the page.' },
   { step: '03', title: 'Download your signed PDF', desc: 'Download the signed document instantly, ready to send.' },
 ];
 
@@ -23,7 +26,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Can I draw my signature?',
-    a: 'Yes, you will be able to draw, type, or upload an image of your signature.',
+    a: 'Yes — use the signature tool to draw, type, or upload an image of your signature.',
   },
   {
     q: 'Is a digitally signed PDF legally valid?',
@@ -35,12 +38,31 @@ const FAQ_ITEMS = [
   },
 ];
 
+const META = {
+  title: 'Sign PDF Online Free – Add Signature to PDF',
+  desc:  'Add your signature to a PDF online. Free, fast, and no sign-up required.',
+};
+
 export default function SignPage() {
+  const [file, setFile] = useState(null);
+
+  if (file) {
+    return (
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <Helmet>
+          <title>{META.title}</title>
+          <meta name="description" content={META.desc} />
+        </Helmet>
+        <Editor file={file} onReset={() => setFile(null)} />
+      </div>
+    );
+  }
+
   return (
     <div className="flex-1 overflow-y-auto bg-gray-50 flex flex-col">
       <Helmet>
-        <title>Sign PDF Online Free – Add Signature to PDF</title>
-        <meta name="description" content="Add your signature to a PDF online. Free, fast, and no sign-up required." />
+        <title>{META.title}</title>
+        <meta name="description" content={META.desc} />
       </Helmet>
 
       {/* Hero */}
@@ -52,22 +74,13 @@ export default function SignPage() {
         </p>
       </section>
 
-      {/* Coming soon placeholder */}
-      <section className="max-w-lg mx-auto px-6 mb-12">
-        <div className="bg-white border-2 border-dashed border-gray-200 rounded-2xl p-12 text-center">
-          <div className="w-14 h-14 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 20h9"/>
-              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-            </svg>
-          </div>
-          <p className="text-gray-600 font-medium">Sign PDF tool coming soon</p>
-          <p className="text-gray-400 text-sm mt-1">We're working on it. Check back shortly.</p>
-        </div>
+      {/* Upload */}
+      <section className="max-w-lg mx-auto w-full px-4 sm:px-6">
+        <UploadScreen onFileSelect={setFile} color="purple" />
       </section>
 
       {/* SEO content */}
-      <div className="max-w-2xl mx-auto px-6 pb-20 space-y-14">
+      <div className="max-w-2xl mx-auto px-6 pb-20 space-y-14 mt-8">
 
         <section>
           <h2 className="text-xl font-bold text-gray-900 mb-6">How to sign a PDF</h2>

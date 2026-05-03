@@ -54,10 +54,12 @@ export default function MergePage() {
       </section>
 
       {/* Merge tool */}
-      <MergeTool />
+      <section className="max-w-lg mx-auto w-full px-4 sm:px-6">
+        <MergeTool/>
+      </section>
 
       {/* SEO content */}
-      <div className="max-w-2xl mx-auto px-6 pb-20 space-y-14">
+      <div className="max-w-2xl mx-auto px-6 pb-20 space-y-14 mt-8">
 
         <section>
           <h2 className="text-xl font-bold text-gray-900 mb-6">How to merge PDFs</h2>

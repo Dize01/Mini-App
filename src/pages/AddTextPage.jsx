@@ -78,7 +78,7 @@ export default function AddTextPage() {
       </section>
 
       {/* Upload tool */}
-      <section className="max-w-lg mx-auto px-6">
+      <section className="max-w-lg mx-auto w-full px-4 sm:px-6">
         <UploadScreen onFileSelect={setFile} />
       </section>
 
