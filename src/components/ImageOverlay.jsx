@@ -1,4 +1,5 @@
 import { useRef, useCallback } from 'react';
+import ResizeHandles from './ResizeHandles';
 
 export default function ImageOverlay({ image, isSelected, onSelect, onUpdate, totalScale }) {
   const dragState = useRef(null);
@@ -89,6 +90,9 @@ export default function ImageOverlay({ image, isSelected, onSelect, onUpdate, to
           draggable={false}
           style={{ width, height, display: 'block', objectFit: 'fill', pointerEvents: 'none' }}
         />
+
+        {/* Resize handles */}
+        {isSelected && <ResizeHandles el={image} totalScale={totalScale} onUpdate={onUpdate} />}
       </div>
     </div>
   );

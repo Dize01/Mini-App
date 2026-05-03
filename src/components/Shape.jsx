@@ -1,4 +1,5 @@
 import { useRef, useCallback } from 'react';
+import ResizeHandles from './ResizeHandles';
 
 export default function Shape({ shape, isSelected, onSelect, onUpdate, totalScale }) {
   const dragState = useRef(null);
@@ -98,6 +99,9 @@ export default function Shape({ shape, isSelected, onSelect, onUpdate, totalScal
             pointerEvents: 'none',
           }}
         />
+
+        {/* Resize handles */}
+        {isSelected && <ResizeHandles el={shape} totalScale={totalScale} onUpdate={onUpdate} />}
       </div>
     </div>
   );
