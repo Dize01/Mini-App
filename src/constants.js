@@ -1,1 +1,1 @@
-export const SITE_NAME = 'Simple PDF Tools';
+export const SITE_NAME = 'PDF Center';
