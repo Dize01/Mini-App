@@ -2,12 +2,12 @@ import { Link } from 'react-router-dom';
 import { SITE_NAME } from '../constants';
 
 const TOOLS = [
-  { label: 'Add Text to PDF', href: '/add-text-to-pdf' },
-  { label: 'Merge PDF',       href: '/merge-pdf-online' },
-  { label: 'Sign PDF',        href: '/sign-pdf-online'  },
-  { label: 'JPG to PDF',      href: '/jpg-to-pdf'       },
+  { label: 'Add Text to PDF', href: '/add-text-to-pdf'   },
+  { label: 'Sign PDF',        href: '/sign-pdf-online'   },
+  { label: 'Merge PDF',       href: '/merge-pdf-online'  },
   { label: 'Split PDF',       href: '/split-pdf-online'  },
-  { label: 'Rotate PDF',     href: '/rotate-pdf-online' },
+  { label: 'Rotate PDF',      href: '/rotate-pdf-online' },
+  { label: 'JPG to PDF',      href: '/jpg-to-pdf'        },
 ];
 
 export default function Footer() {

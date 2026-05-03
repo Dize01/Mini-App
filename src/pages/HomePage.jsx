@@ -19,7 +19,22 @@ const TOOLS = [
       </svg>
     ),
     title: 'Add Text, Shapes & Images',
-    description: 'Place text boxes, shapes, or images anywhere on your PDF. Free and instant — no account needed.',
+    description: 'Add text, shapes, or images anywhere on your PDF instantly. Free, no account needed.',
+  },
+  {
+    href: '/sign-pdf-online',
+    accent: 'bg-purple-500',
+    iconBg: 'bg-purple-50',
+    iconColor: 'text-purple-600',
+    btn: 'bg-purple-600 hover:bg-purple-700',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 20h9"/>
+        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+      </svg>
+    ),
+    title: 'Sign PDF',
+    description: 'Sign any PDF online — draw, type, or upload your signature in seconds. No account needed.',
   },
   {
     href: '/merge-pdf-online',
@@ -35,38 +50,7 @@ const TOOLS = [
       </svg>
     ),
     title: 'Merge PDF',
-    description: 'Combine multiple PDFs into one file in seconds. No file size limits, completely free.',
-  },
-  {
-    href: '/sign-pdf-online',
-    accent: 'bg-purple-500',
-    iconBg: 'bg-purple-50',
-    iconColor: 'text-purple-600',
-    btn: 'bg-purple-600 hover:bg-purple-700',
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 20h9"/>
-        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-      </svg>
-    ),
-    title: 'Sign PDF',
-    description: 'Draw, type, or upload a signature and place it on any PDF. No account needed.',
-  },
-  {
-    href: '/jpg-to-pdf',
-    accent: 'bg-orange-500',
-    iconBg: 'bg-orange-50',
-    iconColor: 'text-orange-500',
-    btn: 'bg-orange-500 hover:bg-orange-600',
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2"/>
-        <circle cx="8.5" cy="8.5" r="1.5"/>
-        <polyline points="21 15 16 10 5 21"/>
-      </svg>
-    ),
-    title: 'JPG to PDF',
-    description: 'Convert JPG, PNG, or WebP images into a PDF. Set page size, orientation, and margins.',
+    description: 'Merge multiple PDFs into one file in seconds. No file size limits, completely free.',
   },
   {
     href: '/split-pdf-online',
@@ -82,7 +66,7 @@ const TOOLS = [
       </svg>
     ),
     title: 'Split PDF',
-    description: 'Extract any range of pages from a PDF into a new document. Preview every page before downloading.',
+    description: 'Split a PDF and extract any pages into a new document. Preview every page before downloading.',
   },
   {
     href: '/rotate-pdf-online',
@@ -96,7 +80,23 @@ const TOOLS = [
       </svg>
     ),
     title: 'Rotate PDF',
-    description: 'Rotate individual pages or all pages in a PDF. Preview every page and download instantly.',
+    description: 'Rotate PDF pages individually or all at once. Preview and download in seconds.',
+  },
+  {
+    href: '/jpg-to-pdf',
+    accent: 'bg-orange-500',
+    iconBg: 'bg-orange-50',
+    iconColor: 'text-orange-500',
+    btn: 'bg-orange-500 hover:bg-orange-600',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5"/>
+        <polyline points="21 15 16 10 5 21"/>
+      </svg>
+    ),
+    title: 'JPG to PDF',
+    description: 'Convert JPG, PNG, or WebP images to PDF instantly. Choose page size, orientation, and margins.',
   },
 ];
 
@@ -180,9 +180,35 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* SEO content block */}
-        <section className="max-w-2xl mx-auto px-4 sm:px-6 pb-16 text-center">
-          <p className="text-sm text-gray-400 leading-relaxed">
+        {/* How it works + SEO content */}
+        <section className="max-w-2xl mx-auto px-4 sm:px-6 pb-16">
+          <div className="text-center mb-8">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">How to Use {SITE_NAME}</h2>
+            <ol className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-0">
+              {[
+                { step: '1', label: 'Choose a tool' },
+                { step: '2', label: 'Upload your PDF' },
+                { step: '3', label: 'Edit or process it' },
+                { step: '4', label: 'Download instantly' },
+              ].map(({ step, label }, i, arr) => (
+                <li key={step} className="flex items-center gap-3 sm:gap-0">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-blue-600 text-white text-sm font-bold flex items-center justify-center shrink-0">
+                      {step}
+                    </div>
+                    <span className="text-sm font-medium text-gray-700 whitespace-nowrap">{label}</span>
+                  </div>
+                  {i < arr.length - 1 && (
+                    <svg className="hidden sm:block mx-4 text-gray-300 shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <p className="text-sm text-gray-400 leading-relaxed text-center">
             {SITE_NAME} lets you add text, shapes, and images to PDF files, merge multiple PDFs,
             and sign documents online for free. All tools work directly in your browser with no uploads
             or registration required.
