@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import FAQ from '../components/FAQ';
+import Footer from '../components/Footer';
 
 const HOW_TO = [
   { step: '01', title: 'Upload your PDF', desc: 'Select the PDF document you need to sign.' },
@@ -36,7 +37,7 @@ const FAQ_ITEMS = [
 
 export default function SignPage() {
   return (
-    <div className="flex-1 overflow-y-auto bg-gray-50">
+    <div className="flex-1 overflow-y-auto bg-gray-50 flex flex-col">
       <Helmet>
         <title>Sign PDF Online Free – Add Signature to PDF</title>
         <meta name="description" content="Add your signature to a PDF online. Free, fast, and no sign-up required." />
@@ -105,6 +106,8 @@ export default function SignPage() {
         </section>
 
       </div>
+
+      <Footer />
     </div>
   );
 }

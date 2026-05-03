@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import FAQ from '../components/FAQ';
+import Footer from '../components/Footer';
 
 const HOW_TO = [
   { step: '01', title: 'Upload your PDF files', desc: 'Select multiple PDF files from your device to combine.' },
@@ -36,7 +37,7 @@ const FAQ_ITEMS = [
 
 export default function MergePage() {
   return (
-    <div className="flex-1 overflow-y-auto bg-gray-50">
+    <div className="flex-1 overflow-y-auto bg-gray-50 flex flex-col">
       <Helmet>
         <title>Merge PDF Online Free – Combine PDF Files Instantly</title>
         <meta name="description" content="Merge multiple PDF files into one in seconds. Free, fast, and no sign-up required." />
@@ -106,6 +107,8 @@ export default function MergePage() {
         </section>
 
       </div>
+
+      <Footer />
     </div>
   );
 }

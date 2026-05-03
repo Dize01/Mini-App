@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import UploadScreen from '../components/UploadScreen';
 import Editor from '../components/Editor';
 import FAQ from '../components/FAQ';
+import Footer from '../components/Footer';
 
 const HOW_TO = [
   { step: '01', title: 'Upload your PDF', desc: 'Click "Choose PDF" or drag and drop your file onto the upload area.' },
@@ -59,7 +60,7 @@ export default function AddTextPage() {
 
   // Landing + upload mode
   return (
-    <div className="flex-1 overflow-y-auto bg-gray-50">
+    <div className="flex-1 overflow-y-auto bg-gray-50 flex flex-col">
       <Helmet>
         <title>Add Text, Shapes & Images to PDF Online Free – No Login</title>
         <meta name="description" content="Upload a PDF and add text, shapes, or images instantly. Free, no sign-up required." />
@@ -124,6 +125,8 @@ export default function AddTextPage() {
         </section>
 
       </div>
+
+      <Footer />
     </div>
   );
 }
