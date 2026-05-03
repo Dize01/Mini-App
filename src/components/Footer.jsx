@@ -48,8 +48,8 @@ export default function Footer() {
           <div>
             <h3 className="text-white font-semibold text-sm mb-4">Legal</h3>
             <ul className="space-y-2.5">
-              <li><span className="text-sm text-gray-600 cursor-default">Privacy Policy <span className="text-xs">(coming soon)</span></span></li>
-              <li><span className="text-sm text-gray-600 cursor-default">Terms of Use <span className="text-xs">(coming soon)</span></span></li>
+              <li><Link to="/privacy-policy" className="text-sm hover:text-white transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/terms-of-use" className="text-sm hover:text-white transition-colors">Terms of Use</Link></li>
             </ul>
           </div>
 

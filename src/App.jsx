@@ -4,6 +4,8 @@ import HomePage from './pages/HomePage';
 import AddTextPage from './pages/AddTextPage';
 import MergePage from './pages/MergePage';
 import SignPage from './pages/SignPage';
+import PrivacyPage from './pages/PrivacyPage';
+import TermsPage from './pages/TermsPage';
 
 export default function App() {
   return (
@@ -15,6 +17,8 @@ export default function App() {
           <Route path="/add-text-to-pdf"   element={<AddTextPage />} />
           <Route path="/merge-pdf-online"  element={<MergePage />} />
           <Route path="/sign-pdf-online"   element={<SignPage />} />
+          <Route path="/privacy-policy"    element={<PrivacyPage />} />
+          <Route path="/terms-of-use"      element={<TermsPage />} />
         </Routes>
       </main>
     </div>
