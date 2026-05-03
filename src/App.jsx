@@ -8,6 +8,7 @@ import PrivacyPage from './pages/PrivacyPage';
 import TermsPage from './pages/TermsPage';
 import JpgToPdfPage from './pages/JpgToPdfPage';
 import SplitPdfPage from './pages/SplitPdfPage';
+import RotatePdfPage from './pages/RotatePdfPage';
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
           <Route path="/sign-pdf-online"   element={<SignPage />} />
           <Route path="/jpg-to-pdf"         element={<JpgToPdfPage />} />
           <Route path="/split-pdf-online"   element={<SplitPdfPage />} />
+          <Route path="/rotate-pdf-online"  element={<RotatePdfPage />} />
           <Route path="/privacy-policy"    element={<PrivacyPage />} />
           <Route path="/terms-of-use"      element={<TermsPage />} />
         </Routes>

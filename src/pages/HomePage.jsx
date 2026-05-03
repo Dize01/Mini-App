@@ -84,6 +84,20 @@ const TOOLS = [
     title: 'Split PDF',
     description: 'Extract any range of pages from a PDF into a new document. Preview every page before downloading.',
   },
+  {
+    href: '/rotate-pdf-online',
+    accent: 'bg-teal-500',
+    iconBg: 'bg-teal-50',
+    iconColor: 'text-teal-600',
+    btn: 'bg-teal-600 hover:bg-teal-700',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21.5 2v6h-6"/><path d="M21.34 15.57a10 10 0 1 1-.57-8.38"/>
+      </svg>
+    ),
+    title: 'Rotate PDF',
+    description: 'Rotate individual pages or all pages in a PDF. Preview every page and download instantly.',
+  },
 ];
 
 const TRUST = [

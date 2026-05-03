@@ -6,7 +6,8 @@ const TOOLS = [
   { label: 'Merge PDF',       href: '/merge-pdf-online' },
   { label: 'Sign PDF',        href: '/sign-pdf-online'  },
   { label: 'JPG to PDF',      href: '/jpg-to-pdf'       },
-  { label: 'Split PDF',       href: '/split-pdf-online' },
+  { label: 'Split PDF',       href: '/split-pdf-online'  },
+  { label: 'Rotate PDF',     href: '/rotate-pdf-online' },
 ];
 
 export default function Footer() {
