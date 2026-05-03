@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { SITE_NAME } from '../constants';
 
 const TOOLS = [
   { label: 'Add Text to PDF', href: '/add-text-to-pdf' },
@@ -21,7 +22,7 @@ export default function Footer() {
                   <polyline points="14 2 14 8 20 8"/>
                 </svg>
               </div>
-              <span className="text-white font-bold text-sm">Simple PDF Tools</span>
+              <span className="text-white font-bold text-sm">{SITE_NAME}</span>
             </Link>
             <p className="text-sm leading-relaxed">
               Free online PDF tools.<br/>
@@ -55,7 +56,7 @@ export default function Footer() {
 
         </div>
         <p className="pt-6 text-center text-xs text-gray-600">
-          © {new Date().getFullYear()} Simple PDF Tools. All rights reserved.
+          © {new Date().getFullYear()} {SITE_NAME}. All rights reserved.
         </p>
       </div>
     </footer>

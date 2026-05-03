@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Footer from '../components/Footer';
+import { SITE_NAME } from '../constants';
 
 const TOOLS = [
   {
@@ -136,7 +137,7 @@ export default function HomePage() {
         {/* SEO content block */}
         <section className="max-w-2xl mx-auto px-4 sm:px-6 pb-16 text-center">
           <p className="text-sm text-gray-400 leading-relaxed">
-            Simple PDF Tools lets you add text, shapes, and images to PDF files, merge multiple PDFs,
+            {SITE_NAME} lets you add text, shapes, and images to PDF files, merge multiple PDFs,
             and sign documents online for free. All tools work directly in your browser with no uploads
             or registration required.
           </p>

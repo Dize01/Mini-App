@@ -1,4 +1,5 @@
 import { Link, NavLink } from 'react-router-dom';
+import { SITE_NAME } from '../constants';
 
 const TOOLS = [
   { label: 'Add Text',  href: '/add-text-to-pdf' },
@@ -17,7 +18,7 @@ export default function Header() {
             <polyline points="14 2 14 8 20 8"/>
           </svg>
         </div>
-        <span className="text-sm font-bold text-gray-900">Simple PDF Tools</span>
+        <span className="text-sm font-bold text-gray-900">{SITE_NAME}</span>
       </Link>
 
       {/* Nav links */}
