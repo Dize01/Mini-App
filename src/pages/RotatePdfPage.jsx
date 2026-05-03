@@ -7,7 +7,7 @@ export default function RotatePdfPage() {
   return (
     <div className="flex-1 overflow-y-auto bg-gray-50 flex flex-col">
       <Helmet>
-        <title>Rotate PDF Online – Free | {SITE_NAME}</title>
+        <title>Rotate PDF Pages Online Free – No Login Required | {SITE_NAME}</title>
         <meta name="description" content="Rotate individual pages or all pages in a PDF. Free, instant, no login required. Works directly in your browser." />
       </Helmet>
 

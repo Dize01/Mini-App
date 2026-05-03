@@ -134,8 +134,8 @@ export default function TermsPage() {
   return (
     <div className="flex-1 overflow-y-auto bg-gray-50 flex flex-col">
       <Helmet>
-        <title>Terms of Use – {SITE_NAME}</title>
-        <meta name="description" content="Terms of Use for {SITE_NAME}." />
+        <title>Terms of Use – {SITE_NAME} | Free Online PDF Tools</title>
+        <meta name="description" content={`Terms of Use for ${SITE_NAME}. Read the conditions for using our free browser-based PDF tools.`} />
       </Helmet>
 
       <div className="flex-1 max-w-2xl mx-auto w-full px-6 py-14">

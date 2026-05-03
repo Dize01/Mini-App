@@ -119,8 +119,8 @@ export default function PrivacyPage() {
   return (
     <div className="flex-1 overflow-y-auto bg-gray-50 flex flex-col">
       <Helmet>
-        <title>Privacy Policy – {SITE_NAME}</title>
-        <meta name="description" content="Privacy Policy for {SITE_NAME}." />
+        <title>Privacy Policy – {SITE_NAME} | Free Online PDF Tools</title>
+        <meta name="description" content={`Privacy Policy for ${SITE_NAME}. Learn how we protect your data — no files are uploaded, no personal information is collected.`} />
       </Helmet>
 
       <div className="flex-1 max-w-2xl mx-auto w-full px-6 py-14">
