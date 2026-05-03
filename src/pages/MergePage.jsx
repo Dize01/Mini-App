@@ -1,10 +1,11 @@
 import { Helmet } from 'react-helmet-async';
 import FAQ from '../components/FAQ';
 import Footer from '../components/Footer';
+import MergeTool from '../components/MergeTool';
 
 const HOW_TO = [
   { step: '01', title: 'Upload your PDF files', desc: 'Select multiple PDF files from your device to combine.' },
-  { step: '02', title: 'Arrange them in order', desc: 'Drag to reorder the files however you need.' },
+  { step: '02', title: 'Arrange them in order', desc: 'Use the up and down buttons to reorder files however you need.' },
   { step: '03', title: 'Merge and download', desc: 'Click merge and your combined PDF downloads instantly.' },
 ];
 
@@ -23,7 +24,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'How many PDFs can I merge at once?',
-    a: 'You will be able to merge as many files as you need in one go.',
+    a: 'As many as you need — there is no artificial limit, though very large files may be slower depending on your device.',
   },
   {
     q: 'Will my files be uploaded to a server?',
@@ -52,20 +53,8 @@ export default function MergePage() {
         </p>
       </section>
 
-      {/* Coming soon placeholder */}
-      <section className="max-w-lg mx-auto px-6 mb-12">
-        <div className="bg-white border-2 border-dashed border-gray-200 rounded-2xl p-12 text-center">
-          <div className="w-14 h-14 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M8 6H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3"/>
-              <polyline points="15 3 12 6 9 3"/>
-              <line x1="12" y1="6" x2="12" y2="14"/>
-            </svg>
-          </div>
-          <p className="text-gray-600 font-medium">Merge PDF tool coming soon</p>
-          <p className="text-gray-400 text-sm mt-1">We're working on it. Check back shortly.</p>
-        </div>
-      </section>
+      {/* Merge tool */}
+      <MergeTool />
 
       {/* SEO content */}
       <div className="max-w-2xl mx-auto px-6 pb-20 space-y-14">

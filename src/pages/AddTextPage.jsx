@@ -67,7 +67,7 @@ export default function AddTextPage() {
       </Helmet>
 
       {/* Hero */}
-      <section className="text-center pt-12 pb-4 px-6">
+      <section className="text-center pt-12 pb-8 px-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-3">
           Add Text, Shapes & Images to PDF
         </h1>
