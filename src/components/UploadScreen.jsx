@@ -28,7 +28,7 @@ export default function UploadScreen({ onFileSelect }) {
   const handleDragLeave = () => setIsDragging(false);
 
   return (
-    <div className="flex flex-col items-center justify-center h-full bg-gray-50">
+    <div className="flex flex-col items-center justify-center py-12 bg-gray-50">
       <div className="w-full max-w-md px-6">
         {/* Logo + title */}
         <div className="flex items-center justify-center gap-3 mb-3">

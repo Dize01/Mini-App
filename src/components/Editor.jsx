@@ -117,7 +117,7 @@ export default function Editor({ file, onReset }) {
   }, []);
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
+    <div className="flex flex-col h-full bg-gray-100">
       <TopBar
         fileName={file.name}
         zoom={zoom}
