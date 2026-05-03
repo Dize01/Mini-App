@@ -8,42 +8,48 @@ export default function ImageOverlay({ image, isSelected, onSelect, onUpdate, to
   const width  = image.width  * totalScale;
   const height = image.height * totalScale;
 
-  const handleDragMouseDown = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onSelect();
-
+  const startDrag = useCallback((clientX, clientY) => {
     dragState.current = {
-      startMouseX: e.clientX,
-      startMouseY: e.clientY,
-      startX: image.x,
-      startY: image.y,
+      startX: clientX, startY: clientY,
+      startImgX: image.x, startImgY: image.y,
     };
 
-    const onMouseMove = (ev) => {
+    const move = (cx, cy) => {
       if (!dragState.current) return;
-      const dx = (ev.clientX - dragState.current.startMouseX) / totalScale;
-      const dy = (ev.clientY - dragState.current.startMouseY) / totalScale;
       onUpdate(image.id, {
-        x: Math.max(0, dragState.current.startX + dx),
-        y: Math.max(0, dragState.current.startY + dy),
+        x: Math.max(0, dragState.current.startImgX + (cx - dragState.current.startX) / totalScale),
+        y: Math.max(0, dragState.current.startImgY + (cy - dragState.current.startY) / totalScale),
       });
     };
 
-    const onMouseUp = () => {
+    const onMove  = e => move(e.clientX, e.clientY);
+    const onTouch = e => { e.preventDefault(); move(e.touches[0].clientX, e.touches[0].clientY); };
+    const end = () => {
       dragState.current = null;
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', end);
+      document.removeEventListener('touchmove', onTouch);
+      document.removeEventListener('touchend', end);
     };
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  }, [image.id, image.x, image.y, totalScale, onSelect, onUpdate]);
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', end);
+    document.addEventListener('touchmove', onTouch, { passive: false });
+    document.addEventListener('touchend', end);
+  }, [image.id, image.x, image.y, totalScale, onUpdate]);
+
+  const handleMouseDown = useCallback(e => {
+    e.preventDefault(); e.stopPropagation(); onSelect(); startDrag(e.clientX, e.clientY);
+  }, [startDrag, onSelect]);
+
+  const handleTouchStart = useCallback(e => {
+    e.stopPropagation(); onSelect(); startDrag(e.touches[0].clientX, e.touches[0].clientY);
+  }, [startDrag, onSelect]);
 
   return (
     <div
       style={{ position: 'absolute', left, top, zIndex: isSelected ? 20 : 10 }}
-      onClick={(e) => { e.stopPropagation(); onSelect(); }}
+      onClick={e => { e.stopPropagation(); onSelect(); }}
     >
       <div
         className={isSelected
@@ -54,8 +60,10 @@ export default function ImageOverlay({ image, isSelected, onSelect, onUpdate, to
         {/* Drag handle when selected */}
         {isSelected && (
           <div
-            onMouseDown={handleDragMouseDown}
+            onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}
             className="absolute -top-6 left-0 right-0 h-6 bg-blue-500 rounded-t flex items-center gap-1 px-2 cursor-grab active:cursor-grabbing select-none z-10"
+            style={{ touchAction: 'none' }}
           >
             <svg width="8" height="12" viewBox="0 0 8 12" fill="rgba(255,255,255,0.8)">
               <circle cx="2" cy="2" r="1.5"/><circle cx="6" cy="2" r="1.5"/>
@@ -69,8 +77,9 @@ export default function ImageOverlay({ image, isSelected, onSelect, onUpdate, to
         {/* Drag overlay when not selected */}
         {!isSelected && (
           <div
-            onMouseDown={handleDragMouseDown}
-            style={{ position: 'absolute', inset: 0, zIndex: 10, cursor: 'move' }}
+            onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}
+            style={{ position: 'absolute', inset: 0, zIndex: 10, cursor: 'move', touchAction: 'none' }}
           />
         )}
 
