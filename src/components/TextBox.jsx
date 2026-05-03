@@ -1,5 +1,11 @@
 import { useRef, useEffect, useCallback } from 'react';
 
+const CSS_FONTS = {
+  Arial:   'Arial, Helvetica, sans-serif',
+  Times:   '"Times New Roman", Georgia, serif',
+  Courier: '"Courier New", Courier, monospace',
+};
+
 export default function TextBox({ box, isSelected, onSelect, onUpdate, totalScale }) {
   const editorRef = useRef(null);
   const isEditingRef = useRef(false);
@@ -120,7 +126,8 @@ export default function TextBox({ box, isSelected, onSelect, onUpdate, totalScal
             fontSize: `${fontSize}px`,
             color: box.color,
             fontWeight: box.bold ? 'bold' : 'normal',
-            fontFamily: 'Arial, Helvetica, sans-serif',
+            fontStyle: box.italic ? 'italic' : 'normal',
+            fontFamily: CSS_FONTS[box.fontFamily] ?? CSS_FONTS.Arial,
             lineHeight: 1.25,
             minWidth: '3ch',
             display: 'inline-block',

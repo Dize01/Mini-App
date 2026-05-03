@@ -13,7 +13,7 @@ export default function Editor({ file, onReset }) {
   const [selectedTool, setSelectedTool] = useState('select');
   const [activeShapeType, setActiveShapeType] = useState('rect');
   const [selectedId, setSelectedId]     = useState(null);
-  const [zoom, setZoom]                 = useState(1.0);
+  const [zoom, setZoom]                 = useState(() => window.innerWidth < 768 ? 0.5 : 1.0);
   const [pageInfo, setPageInfo]         = useState(null);
 
   const totalScale = RENDER_SCALE * zoom;
@@ -27,7 +27,7 @@ export default function Editor({ file, onReset }) {
     const id = String(nextId++);
     setTextBoxes(prev => [...prev, {
       id, page: pageNum, x: pdfX, y: pdfY,
-      text: 'Enter text', fontSize: 16, color: '#1a1a1a', bold: false,
+      text: 'Enter text', fontSize: 16, color: '#1a1a1a', bold: false, italic: false, fontFamily: 'Arial',
     }]);
     setSelectedId(id);
     setSelectedTool('select');
@@ -149,7 +149,7 @@ export default function Editor({ file, onReset }) {
         images={images}
         onReset={onReset}
       />
-      <div className="flex flex-col-reverse md:flex-row flex-1 overflow-hidden">
+      <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
         <Sidebar
           selectedTool={selectedTool}
           onToolChange={handleToolChange}

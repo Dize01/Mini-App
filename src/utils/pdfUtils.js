@@ -13,8 +13,34 @@ export async function downloadPDF(file, textBoxes = [], shapes = [], images = []
   const pdfDoc = await PDFDocument.load(await file.arrayBuffer());
   const pages  = pdfDoc.getPages();
 
-  const helvetica     = await pdfDoc.embedFont(StandardFonts.Helvetica);
-  const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+  const embeddedFonts = {
+    Arial:   {
+      normal:     await pdfDoc.embedFont(StandardFonts.Helvetica),
+      bold:       await pdfDoc.embedFont(StandardFonts.HelveticaBold),
+      italic:     await pdfDoc.embedFont(StandardFonts.HelveticaOblique),
+      boldItalic: await pdfDoc.embedFont(StandardFonts.HelveticaBoldOblique),
+    },
+    Times:   {
+      normal:     await pdfDoc.embedFont(StandardFonts.TimesRoman),
+      bold:       await pdfDoc.embedFont(StandardFonts.TimesRomanBold),
+      italic:     await pdfDoc.embedFont(StandardFonts.TimesRomanItalic),
+      boldItalic: await pdfDoc.embedFont(StandardFonts.TimesRomanBoldItalic),
+    },
+    Courier: {
+      normal:     await pdfDoc.embedFont(StandardFonts.Courier),
+      bold:       await pdfDoc.embedFont(StandardFonts.CourierBold),
+      italic:     await pdfDoc.embedFont(StandardFonts.CourierOblique),
+      boldItalic: await pdfDoc.embedFont(StandardFonts.CourierBoldOblique),
+    },
+  };
+
+  function pickFont(box) {
+    const family = embeddedFonts[box.fontFamily] ?? embeddedFonts.Arial;
+    if (box.bold && box.italic) return family.boldItalic;
+    if (box.bold)               return family.bold;
+    if (box.italic)             return family.italic;
+    return family.normal;
+  }
 
   // ── Images (bottom layer) ─────────────────────────────────
   for (const image of images) {
@@ -76,7 +102,7 @@ export async function downloadPDF(file, textBoxes = [], shapes = [], images = []
     const page = pages[(box.page ?? 1) - 1];
     if (!page) continue;
     const { height: pH } = page.getSize();
-    const font = box.bold ? helveticaBold : helvetica;
+    const font = pickFont(box);
 
     box.text.split('\n').forEach((line, i) => {
       if (!line && i === box.text.split('\n').length - 1) return;

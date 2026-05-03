@@ -3,6 +3,12 @@ import SignatureModal from './SignatureModal';
 
 const PRESET_COLORS = ['#1a1a1a','#ef4444','#3b82f6','#22c55e','#f59e0b','#8b5cf6','#ec4899','#ffffff'];
 
+const FONTS = [
+  { label: 'Arial',           value: 'Arial'   },
+  { label: 'Times New Roman', value: 'Times'   },
+  { label: 'Courier',         value: 'Courier' },
+];
+
 function ColorRow({ label, value, onChange, allowNone }) {
   return (
     <div>
@@ -92,9 +98,7 @@ export default function Sidebar({
 
   return (
     <>
-    {/* col-reverse on mobile: toolbar is first in DOM → appears at bottom; panel → above it */}
-    {/* flex-row on desktop: toolbar on left, panel to its right */}
-    <div className="flex flex-col-reverse md:flex-row shrink-0">
+    <div className="flex flex-col md:flex-row shrink-0">
 
       {/* ── Icon toolbar ── */}
       <div className="
@@ -102,7 +106,7 @@ export default function Sidebar({
         w-full md:w-14
         h-14 md:h-auto
         bg-white
-        border-t md:border-t-0 md:border-r
+        border-b md:border-b-0 md:border-r
         border-gray-200
         items-center
         justify-around md:justify-start
@@ -187,7 +191,7 @@ export default function Sidebar({
         <div className="
           w-full md:w-56
           bg-white
-          border-t md:border-t-0 md:border-r
+          border-b md:border-b-0 md:border-r
           border-gray-200
           flex flex-col p-4 gap-4
           overflow-y-auto
@@ -212,11 +216,27 @@ export default function Sidebar({
                 </div>
               </div>
               <div>
+                <label className="text-xs text-gray-500 font-medium block mb-1.5">Font</label>
+                <select
+                  value={selectedBox.fontFamily ?? 'Arial'}
+                  onChange={e => onUpdateBox(selectedBox.id, { fontFamily: e.target.value })}
+                  className="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+                >
+                  {FONTS.map(f => <option key={f.value} value={f.value}>{f.label}</option>)}
+                </select>
+              </div>
+              <div>
                 <label className="text-xs text-gray-500 font-medium block mb-1.5">Style</label>
-                <button onClick={() => onUpdateBox(selectedBox.id, { bold: !selectedBox.bold })}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-bold border transition-all ${
-                    selectedBox.bold ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
-                  }`}>B</button>
+                <div className="flex gap-2">
+                  <button onClick={() => onUpdateBox(selectedBox.id, { bold: !selectedBox.bold })}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-bold border transition-all ${
+                      selectedBox.bold ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                    }`}>B</button>
+                  <button onClick={() => onUpdateBox(selectedBox.id, { italic: !selectedBox.italic })}
+                    className={`px-3 py-1.5 rounded-lg text-sm border transition-all italic ${
+                      selectedBox.italic ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                    }`}>I</button>
+                </div>
               </div>
               <ColorRow label="Color" value={selectedBox.color} onChange={v => onUpdateBox(selectedBox.id, { color: v })} />
               <DeleteBtn onClick={() => onDeleteBox(selectedBox.id)} />
