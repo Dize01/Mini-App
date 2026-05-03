@@ -52,6 +52,38 @@ const TOOLS = [
     title: 'Sign PDF',
     description: 'Draw, type, or upload a signature and place it on any PDF. No account needed.',
   },
+  {
+    href: '/jpg-to-pdf',
+    accent: 'bg-orange-500',
+    iconBg: 'bg-orange-50',
+    iconColor: 'text-orange-500',
+    btn: 'bg-orange-500 hover:bg-orange-600',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5"/>
+        <polyline points="21 15 16 10 5 21"/>
+      </svg>
+    ),
+    title: 'JPG to PDF',
+    description: 'Convert JPG, PNG, or WebP images into a PDF. Set page size, orientation, and margins.',
+  },
+  {
+    href: '/split-pdf-online',
+    accent: 'bg-rose-500',
+    iconBg: 'bg-rose-50',
+    iconColor: 'text-rose-500',
+    btn: 'bg-rose-500 hover:bg-rose-600',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="9" y1="13" x2="15" y2="13"/>
+      </svg>
+    ),
+    title: 'Split PDF',
+    description: 'Extract any range of pages from a PDF into a new document. Preview every page before downloading.',
+  },
 ];
 
 const TRUST = [

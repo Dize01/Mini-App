@@ -2,9 +2,11 @@ import { Link, NavLink } from 'react-router-dom';
 import { SITE_NAME } from '../constants';
 
 const TOOLS = [
-  { label: 'Add Text',  href: '/add-text-to-pdf' },
-  { label: 'Merge PDF', href: '/merge-pdf-online' },
-  { label: 'Sign PDF',  href: '/sign-pdf-online'  },
+  { label: 'Add Text',   href: '/add-text-to-pdf' },
+  { label: 'Merge PDF',  href: '/merge-pdf-online' },
+  { label: 'Sign PDF',   href: '/sign-pdf-online'  },
+  { label: 'JPG to PDF', href: '/jpg-to-pdf'       },
+  { label: 'Split PDF',  href: '/split-pdf-online' },
 ];
 
 export default function Header() {
